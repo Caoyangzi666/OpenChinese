@@ -1,0 +1,20 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const base=path.resolve(__dirname,'../app/src/main/assets');
+const {ChineseEngine}=require(path.join(base,'web/engine.js'));
+const dictionary=JSON.parse(fs.readFileSync(path.join(base,'data/dictionary.json'))),levels=JSON.parse(fs.readFileSync(path.join(base,'data/hsk.json')));
+const supplement=JSON.parse(fs.readFileSync(path.join(base,'data/hsk-supplement.json')));
+const engine=new ChineseEngine(dictionary,levels,supplement);let tests=0;
+function test(name,fn){fn();tests++;console.log('PASS',name);}
+test('complete offline data included',()=>{assert.equal(Object.keys(dictionary).length,198654);assert.equal(Object.keys(levels).length,10896);});
+test('selected HSK threshold includes selected level',()=>{for(let selected=1;selected<=7;selected++)for(let level=1;level<=7;level++)assert.equal(engine.show({pinyin:'test',level},selected),level>=selected);});
+test('HSK3 vs HSK4 has the expected words',()=>{const a=engine.segment('冬天，共同，爱护，爱戴');const winter=a.find(t=>t.word==='冬天'),common=a.find(t=>t.word==='共同');assert.equal(winter.level,3);assert.equal(common.level,4);assert(engine.show(winter,3));assert(!engine.show(winter,4));assert(engine.show(common,4));assert(!engine.show(common,5));});
+test('Simplified and Traditional resolve to same level',()=>{assert.equal(engine.level('银行',engine.entry('银行')),3);assert.equal(engine.level('銀行',engine.entry('銀行')),3);});
+test('non-HSK keeps pinyin and global toggle hides all',()=>{assert(engine.show({pinyin:'test',level:0},7));assert(!engine.show({pinyin:'test',level:0},1,false));});
+test('longest match has stable boundaries and readings across thresholds',()=>{const run='研究生命起源中国人民银行中华人民共和国中央人民政府';const before=engine.segment(run);for(let s=1;s<=7;s++){const tokens=engine.segment(run);assert.deepEqual(tokens,before);for(const t of tokens)engine.show(t,s);}assert.equal(before.map(t=>t.word||t.text).join(''),run);});
+test('every vocabulary entry is classified and ruby is monotonic',()=>{for(const word of Object.keys(levels)){const tokens=engine.segment(word);assert.equal(tokens.map(t=>t.word||t.text).join(''),word);for(const t of tokens){let prev=true;for(let s=1;s<=7;s++){const visible=engine.show(t,s);assert(!visible||prev,'annotation appeared when threshold increased');prev=visible;}}}});
+test('punctuation and non-Han text are preserved',()=>{const input='“你好！” Hello 123，銀行。';assert.equal(engine.segment(input).map(t=>t.word||t.text).join(''),input);});
+test('video regression: Beijing is HSK1, with explicit supplemental provenance',()=>{const c=engine.classify('北京');assert.equal(c.level,1);assert.equal(c.source,'supplement');assert(!engine.show({...c,pinyin:'Běi jīng'},6));});
+test('video regression: productive compounds have estimated levels, not non-HSK',()=>{for(const [word,level] of [['想到',1],['活着',4],['活著',4],['一个',1]]){const c=engine.classify(word);assert.equal(c.level,level,word);assert.equal(c.source,'derived',word);assert(!engine.show({...c,pinyin:'test'},6));assert.equal(engine.segment(word).map(t=>t.word||t.text).join(''),word);}});
+test('unknown words and names are not classified from arbitrary character levels',()=>{assert.equal(engine.classify('余华').source,'non_hsk');assert.equal(engine.classify('量子纠缠').source,'non_hsk');assert.equal(engine.classify('爱情').source,'syllabus');});
+test('common negative, quantity and desire forms hide at higher thresholds',()=>{for(const [word,level] of [['不是',1],['不能',1],['不会',1],['不可能',2],['想要',1],['每天',2],['每个人',2],['每個人',2]]){const c=engine.classify(word);assert.equal(c.source,'derived',word);assert.equal(c.level,level,word);assert(!engine.show({...c,pinyin:'test'},6));}assert.equal(engine.classify('不要').source,'syllabus');assert.equal(engine.classify('真是').level,7);});
+console.log(JSON.stringify({tests,headwords:Object.keys(dictionary).length,hskForms:Object.keys(levels).length}));

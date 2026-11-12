@@ -1,0 +1,16 @@
+OpenChinese data acknowledgements
+
+CC-CEDICT Chinese-English dictionary
+https://cc-cedict.org/
+https://www.mdbg.net/chinese/dictionary?page=cedict
+Licensed under Creative Commons Attribution-ShareAlike 4.0 (CC BY-SA 4.0):
+https://creativecommons.org/licenses/by-sa/4.0/
+Derived from the CC-CEDICT snapshot prepared for Chinese Reading Assistant on 2026-11-11 (125,405 source entries; 198,654 indexed headwords). Changes: StarDict records converted to a compact JSON lookup with numbered pinyin already converted to tone marks by the preceding dictionary builder; written-form aliases preserved. The adapted dictionary data remains CC BY-SA 4.0.
+
+HSK vocabulary
+Source: https://github.com/chelsea6502/hsk-2025-data
+Official syllabus source attributed by that project: https://www.chinesetest.cn/
+License: Creative Commons Attribution 4.0 (CC BY 4.0): https://creativecommons.org/licenses/by/4.0/
+Changes: deduplicated written forms, earliest-introduced level, seven separate non-cumulative files and JSON lookup. 10,896 written forms retained. HSK7-9 remains one combined band.
+
+The OpenChinese 自由 icon and sample reading passage were created for this project. The 自由 lettering and the book/wings pictogram use custom monoline vector strokes; no font is embedded in the icon.

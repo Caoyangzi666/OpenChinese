@@ -1,0 +1,43 @@
+# Android/Java build outputs
+build/
+.gradle/
+local.properties
+.idea/
+*.iml
+*.class
+*.jar
+*.apk
+*.aab
+*.idsig
+# Signing material and machine settings
+*.jks
+*.keystore
+*.p12
+*.pem
+*.key
+*.der
+.env
+.env.*
+!.env.example
+keystore.properties
+signing.properties
+# Test/runtime files
+node_modules/
+__pycache__/
+*.pyc
+playwright-report/
+test-results/
+preview/*
+!preview/01-library.png
+!preview/02-reader-hsk4.png
+!preview/03-word-flashcard.png
+!preview/04-flashcards.png
+!preview/05-library-delete.png
+!preview/06-dark-settings.png
+!preview/07-dark-reader.png
+outputs/
+dist/
+work/
+*.log
+Thumbs.db
+.DS_Store

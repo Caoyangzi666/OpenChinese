@@ -1,0 +1,19 @@
+{
+  "name": "openchinese",
+  "version": "0.1.4-alpha",
+  "private": true,
+  "license": "GPL-3.0-only",
+  "description": "Offline Android EPUB reader with adaptive HSK pinyin and flashcards",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node tests/engine.test.cjs",
+    "test:browser": "python tools/test_browser.py"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Caoyangzi666/OpenChinese.git"
+  },
+  "homepage": "https://github.com/Caoyangzi666/OpenChinese"
+}

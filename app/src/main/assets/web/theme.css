@@ -1,0 +1,13 @@
+:root{color-scheme:light}
+:root[data-theme="dark"]{color-scheme:dark;--paper:#141c19;--card:#1d2923;--ink:#e1e9e0;--muted:#a4b5a9;--green:#94cdb6;--sage:#2c4035;--gold:#d9aa52;--line:#34483d}
+:root[data-theme="dark"] .hero{background:#183f34;color:#fffbea}
+:root[data-theme="dark"] .hero .button{color:#19382f}
+:root[data-theme="dark"] .button:not(.secondary):not(.ghost):not(.danger){color:#142a20}
+:root[data-theme="dark"] #nav{background:#1b2722f5}
+:root[data-theme="dark"] .version{border-color:var(--line)}
+:root[data-theme="dark"] input,:root[data-theme="dark"] textarea{background:var(--paper);color:var(--ink)}
+:root[data-theme="dark"] input::placeholder,:root[data-theme="dark"] textarea::placeholder{color:var(--muted);opacity:1}
+:root[data-theme="dark"] .button.danger{background:#402b24;color:#efb39c}
+:root[data-theme="dark"] .delete-book{color:#efb39c}
+:root[data-theme="dark"] #toast{background:#d9e8de;color:#142a20}
+:root[data-theme="dark"] #backdrop{background:#0009}

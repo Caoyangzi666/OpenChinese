@@ -1,0 +1,13 @@
+OpenChinese
+Copyright (C) 2026 OpenChinese contributors
+
+Application source code and original project artwork are licensed under the
+GNU General Public License, version 3 only (SPDX: GPL-3.0-only).
+See LICENSE for the full terms. No warranty is provided.
+
+The bundled vocabulary and dictionary are separate data collections:
+- CC-CEDICT and its adapted dictionary.json: CC BY-SA 4.0.
+- HSK vocabulary files and hsk.json: CC BY 4.0.
+- hsk-supplement.json records independently checked supplemental classification.
+See DATA-NOTICES.txt for attribution, source links and transformations.
+The GPL notice does not replace those data licenses.

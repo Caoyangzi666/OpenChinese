@@ -1,0 +1,90 @@
+{
+  "version": "0.1.4-alpha",
+  "apk_bytes": 6211676,
+  "apk_sha256": "166b5d6bc058329e2aa97100a8cf5266dcbc96e204871bca09bbbc964e7367c1",
+  "engine_regression_groups_passed": 12,
+  "hsk_forms_checked": 10896,
+  "dictionary_headwords": 198654,
+  "reader_gesture_checks_passed": [
+    "edge taps",
+    "horizontal swipe",
+    "vertical rejection",
+    "configurable continuous hold (default 400ms)",
+    "early-release cancellation",
+    "movement cancellation",
+    "HSK repagination",
+    "page position persistence"
+  ],
+  "preferences_checks_passed": [
+    "400ms default for new and existing installs",
+    "all five hold choices",
+    "duration respected and hold cancellation",
+    "settings survive reload",
+    "dark UI and EPUB text including publisher colours",
+    "live theme toggle without changing words or position",
+    "dark word sheet and flashcards",
+    "light theme restore"
+  ],
+  "browser_ui_passed": [
+    "HSK3 to HSK4 immediate ruby visibility",
+    "unchanged word boundaries",
+    "save flashcard and reload",
+    "review scheduling",
+    "backup escaping",
+    "EPUB active-content sanitisation"
+  ],
+  "android_bridge_simulation_passed": [
+    "EPUB import callback",
+    "chapter switching",
+    "CSP sanitisation",
+    "flashcard export",
+    "library persistence",
+    "reading-position restore"
+  ],
+  "book_deletion_checks_passed": [
+    "cancellable confirmation",
+    "native failure keeps library state",
+    "private resources removed",
+    "position cleared",
+    "cards retained",
+    "original EPUB and other books preserved",
+    "persisted deletion",
+    "re-import",
+    "invalid ID rejected",
+    "staged rollback"
+  ],
+  "java_importer_tested_on": {
+    "test_epub_chapters": 1,
+    "user_novel_chapters": 57,
+    "unsafe_zip_rejected": true,
+    "encrypted_epub_rejected": true
+  },
+  "apk_validation": {
+    "java_classes_generated": true,
+    "dex_generated": true,
+    "zip_crc_verified": true,
+    "zip_alignment_verified": true,
+    "v2_signature_verified": true,
+    "v3_signature_verified": true,
+    "min_android_api": 26,
+    "target_android_api": 35
+  },
+  "build_note": "The local JDK emitted an AccessDeniedException during ZIP file-manager cleanup after generating class files, with exit code 0. DEX, APK integrity, alignment and signatures were independently verified. A standard Android Studio/Gradle project is also provided.",
+  "previous_version_device_feedback": "User confirmed v0.1.0 reading and flashcards; reported HSK gaps. This update has not yet been device-tested.",
+  "physical_android_test_performed": false,
+  "android_emulator_test_performed": false,
+  "phone_modified": false,
+  "publication_snapshot": {
+    "license": "GPL-3.0-only",
+    "engine_regression_groups": 12,
+    "portable_browser_suites_passed": [
+      "ui",
+      "native-ui",
+      "gestures",
+      "preferences"
+    ],
+    "runtime_source_matches_working_project": true,
+    "private_signing_material_included": false,
+    "personal_epubs_included": false
+  }
+}
