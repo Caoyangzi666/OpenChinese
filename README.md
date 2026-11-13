@@ -6,16 +6,27 @@ An offline Android EPUB reader for Chinese, with adaptive HSK pinyin, an include
 
 **Read freely. Learn at your own pace.**
 
-**Current version: 0.1.4-alpha · Android 8.0+ · English interface · GPLv3**
+**Current version: 0.1.5-alpha · Android 8.0+ · English interface · GPLv3**
 
-OpenChinese is in active alpha development. HSK coverage and word segmentation still need real-world feedback. It uses deterministic dictionary matching, so ambiguous compounds and polyphonic readings can be imperfect.
+OpenChinese is in active alpha development. HSK coverage and word segmentation still need real-world feedback. It uses deterministic word-frequency segmentation with explicit reading-construction rules. Ambiguous compounds, names and polyphonic readings can still need correction.
+
+## New in v0.1.5-alpha
+
+- **Whole-word HSK filtering:** lower-level words hide pinyin; selected-level, higher-level and genuine non-HSK words retain it. Raising the threshold never changes segmentation or adds annotations.
+- Improved segmentation using fixed word frequencies, with tested reading-construction boundaries such as 看 / 中文 / 书 and improved 不 / 知道 segmentation.
+- All dictionary pronunciation/sense pairs are preserved. 姆 now defaults to mǔ, ordinary readings replace unrelated surname defaults, and alternative readings can be chosen for flashcards.
+- 第一 and Chinese number forms receive clearly labelled estimated classifications instead of remaining unclassified.
+- Words spanning EPUB inline emphasis stay selectable as whole words; explicit line breaks remain boundaries.
+- Nineteen engine regression groups, including the screenshot examples, and five browser suites pass. The APK has not yet been verified on a physical Android device.
+
+See the [release notes](docs/releases/v0.1.5-alpha.md) and [Android test checklist](docs/TEST-ON-ANDROID.txt).
 
 ## What you can do
 
 - Import unencrypted EPUB books into a private on-device library.
 - Read with pinyin adapted to your HSK level. The selected level stays visible; earlier levels are hidden. Genuine non-HSK words keep their dictionary reading.
 - Change HSK level without changing word boundaries. Supplemented and estimated classifications are identified in the dictionary.
-- Hold a word to open its English definition and save a flashcard, context and personal note.
+- Hold a whole word to open its English definition and save a flashcard, context and personal note, including when its pinyin is hidden. Choose another dictionary pronunciation and its matching meaning before saving when needed.
 - Choose the hold duration: **0.3 / 0.4 / 0.5 / 0.7 / 1 second**, with **0.4 seconds as the default**.
 - Turn pages with horizontal swipes, side taps or the footer arrows; choose chapters and resume your reading position.
 - Use dark mode across the library, book pages, dictionary and flashcards.
@@ -43,7 +54,7 @@ Community builds signed with a different key cannot update the official APK in p
 
 Segmentation uses the full dictionary and HSK vocabulary before applying the selected level:
 
-1. Segment Chinese text using deterministic longest matching.
+1. Segment Chinese text using a fixed word-frequency graph, independently of the selected HSK level.
 2. Classify whole tokens and their Simplified/Traditional aliases.
 3. Show pinyin when the token's level is at least the selected level, or when it is genuinely outside HSK.
 
@@ -66,7 +77,7 @@ branding/               Original 自由 SVG and PNG logo
 docs/                   Testing, development and release notes
 ```
 
-See [manual testing and known limitations](docs/TESTING.md). The previous alpha was used on a physical Android phone; version 0.1.4 changes have desktop/browser checks and a verified APK signature, but still require device confirmation.
+See [manual testing and known limitations](docs/TESTING.md). The previous alpha was used on a physical Android phone; version 0.1.5 changes have desktop/browser checks and a verified APK signature, but still require device confirmation.
 
 ## Contributing
 
@@ -79,6 +90,7 @@ Original application code and project artwork: **GNU GPL version 3 only**, with 
 The included data retains its own licenses:
 
 - **CC-CEDICT:** CC BY-SA 4.0.
+- **Jieba segmentation frequencies and pypinyin default readings:** MIT (notices in `licenses/`).
 - **HSK vocabulary:** CC BY 4.0, from chelsea6502/hsk-2025-data, attributed there to chinesetest.cn.
 
 See [DATA-NOTICES.txt](DATA-NOTICES.txt) for source links, attribution and transformations. These data licenses are not replaced by the application's GPL license.

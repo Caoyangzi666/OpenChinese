@@ -5,7 +5,7 @@ https://cc-cedict.org/
 https://www.mdbg.net/chinese/dictionary?page=cedict
 Licensed under Creative Commons Attribution-ShareAlike 4.0 (CC BY-SA 4.0):
 https://creativecommons.org/licenses/by-sa/4.0/
-Derived from the CC-CEDICT snapshot prepared for Chinese Reading Assistant on 2026-11-11 (125,405 source entries; 198,654 indexed headwords). Changes: StarDict records converted to a compact JSON lookup with numbered pinyin already converted to tone marks by the preceding dictionary builder; written-form aliases preserved. The adapted dictionary data remains CC BY-SA 4.0.
+Derived from the CC-CEDICT snapshot prepared for Chinese Reading Assistant on 2026-11-11 (125,405 source entries; 198,654 indexed headwords). Changes: StarDict records converted to a compact JSON lookup with numbered pinyin already converted to tone marks by the preceding dictionary builder; written-form aliases preserved. Version 0.1.5 preserves all pronunciation/sense pairs; defaults prefer ordinary lexical senses and pypinyin standalone readings, when present in the source dictionary. The adapted dictionary data remains CC BY-SA 4.0.
 
 HSK vocabulary
 Source: https://github.com/chelsea6502/hsk-2025-data
@@ -14,3 +14,14 @@ License: Creative Commons Attribution 4.0 (CC BY 4.0): https://creativecommons.o
 Changes: deduplicated written forms, earliest-introduced level, seven separate non-cumulative files and JSON lookup. 10,896 written forms retained. HSK7-9 remains one combined band.
 
 The OpenChinese 自由 icon and sample reading passage were created for this project. The 自由 lettering and the book/wings pictogram use custom monoline vector strokes; no font is embedded in the icon.
+
+Word segmentation frequencies
+Source: https://github.com/fxsjy/jieba/blob/master/jieba/dict.txt
+Copyright (c) 2013 Sun Junyi. MIT license, reproduced in licenses/jieba-MIT.txt.
+Changes: retained frequencies for CC-CEDICT and HSK entries, propagated across written-form aliases. No HMM model or Python runtime is bundled.
+
+Default standalone pronunciations
+Source: https://github.com/mozillazg/python-pinyin/blob/master/pypinyin/pinyin_dict.json
+MIT license, reproduced in licenses/pypinyin-MIT.txt.
+Changes: used the first reading only where it matches an existing CC-CEDICT sense for an isolated character. Whole-word HSK classification and whole-word pronunciations are separate. All alternative CC-CEDICT readings remain available in the dictionary.
+Input hashes: data/reading-data-version.json in the app assets.

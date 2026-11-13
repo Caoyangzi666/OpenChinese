@@ -1,0 +1,11 @@
+OpenChinese 0.1.5-alpha — word-based HSK reading
+
+1. Export your existing flashcards as a precaution. Install this APK over the current app; do not uninstall or clear app storage.
+2. Open your book and the first chapter. At HSK1, 第一 should show dì yī. At HSK2 and above it should hide that pinyin. The estimate is labelled in the dictionary.
+3. 姆 should show mǔ. Hold it to open the dictionary: alternative m remains available for expressions that use that reading.
+4. Change HSK3 to HSK4, then HSK6 and HSK7–9. Pinyin may disappear, but no extra annotations should appear and words must not split or merge.
+5. Hold a word whose pinyin is hidden. Save its flashcard and a note. Verify the complete word, reading, meaning and note in Flashcards after closing and reopening the app.
+6. For a polyphonic word, choose an alternative pronunciation in the dictionary sheet and save it. Verify that its matching definition and chosen pronunciation were saved.
+7. Check swipe/side-tap page turns, reading-position restore, dark mode and your existing flashcards.
+
+This version passed desktop browser and APK checks. It has not been opened on a physical Android device by the developer assistant. Ambiguous segmentation and readings can still need correction.

@@ -1,0 +1,10 @@
+{
+  "algorithm": "deterministic word-frequency DAG, no HMM",
+  "frequency_source": "https://github.com/fxsjy/jieba/blob/master/jieba/dict.txt",
+  "frequency_input_sha256": "7197c3211ddd98962b036cdf40324d1ea2bfaa12bd028e68faa70111a88e12a8",
+  "default_reading_source": "https://github.com/mozillazg/python-pinyin/blob/master/pypinyin/pinyin_dict.json",
+  "default_reading_input_sha256": "5f294c01e6c6c0a1c8e329c79335a3f8e0b27d06bf1de7a99244b765892d1e5b",
+  "dictionary_headwords": 198654,
+  "frequency_headwords": 142141,
+  "multiple_reading_headwords": 4056
+}

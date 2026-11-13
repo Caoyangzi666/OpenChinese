@@ -81,3 +81,13 @@ Use a book you are allowed to test. The test works on temporary imported copies,
 The dictionary JSON, HSK JSON, separate TSV vocabulary files and original logo are included. Their conversion and attribution are documented in DATA-NOTICES.txt. The prior workspace-specific data-preparation and packaging helpers are not needed to compile this project and are not included in this publication snapshot.
 
 VALIDATION.json records checks of the v0.1.4-alpha runtime/APK in the original build workspace. It is not a CI badge or proof that a later fork has passed tests. Any modified release needs its own verification.
+
+## Reading-data rebuild
+
+The bundled generated data is ready to build offline. Optional rebuilding preserves all CC-CEDICT pronunciation/sense pairs, retains written-form aliases and adapts Jieba word frequencies. It does not replace whole-word HSK lists with character lists.
+
+```sh
+python tools/prepare_reading_data.py --stardict PATH_TO_CEDICT_BASENAME --frequencies PATH_TO_JIEBA_DICT_TXT --readings PATH_TO_PYPINYIN_PINYIN_DICT_JSON
+```
+
+Exact input hashes and sources are recorded in `app/src/main/assets/data/reading-data-version.json`. Keep the MIT notices in `licenses/` and the existing CC BY-SA / CC BY data notices. Engine tests cover 19 groups; the browser runner includes the additional `reading` suite for EPUB inline formatting, pronunciation selection and whole-word flashcards.
