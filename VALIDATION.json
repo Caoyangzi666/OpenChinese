@@ -1,5 +1,5 @@
 {
-  "version": "0.1.5-alpha",
+  "version": "0.1.6-alpha",
   "engine_regression_groups": 19,
   "hsk_forms_checked": 10896,
   "dictionary_headwords": 198654,
@@ -17,7 +17,8 @@
     "native-ui",
     "gestures",
     "preferences",
-    "reading"
+    "reading",
+    "chapters"
   ],
   "reading_regressions": [
     "\u7b2c\u4e00 estimated level and visibility",
@@ -34,8 +35,8 @@
     "existing card note survives reload"
   ],
   "apk": {
-    "sha256": "07e689a368641c697234398ae541d409bd0c8a93dfffb8da21b56bbdbb021da7",
-    "bytes": 8096151,
+    "sha256": "c92da474eadf135334a65f4ec715cef91dea7e8a881446aa6bd1161b46a72ff1",
+    "bytes": 8100315,
     "all_assets_match_source": true,
     "zip_crc_valid": true,
     "dex_valid": true,
@@ -43,10 +44,11 @@
     "v2_signature_valid": true,
     "v3_signature_valid": true,
     "application_id": "org.openchinese.reader",
-    "version_code": 6,
+    "version_code": 7,
     "min_sdk": 26,
     "target_sdk": 35,
-    "same_existing_alpha_signing_key": true
+    "same_existing_alpha_signing_key": true,
+    "native_async_method_in_dex": true
   },
   "build_note": "Local JDK emitted an AccessDeniedException during archive-file-manager cleanup after class generation, exit code 0. DEX generation, APK integrity, source-asset equality, zip alignment and v2/v3 signatures subsequently verified.",
   "physical_android_test_performed": false,
@@ -58,6 +60,60 @@
     "Explicit productive estimates are not official whole-word HSK entries.",
     "Alternative selection affects the saved flashcard, not all occurrences in the book."
   ],
-  "browser_regression_result": "All five suites passed after correcting the local test-server backlog; reading suite also passed three consecutive fresh launches.",
-  "test_harness_note": "An initial intermittent ERR_CONNECTION_REFUSED for app.js was traced to the local HTTP server connection backlog on Windows. Increased backlog to 128; no app runtime change was needed for this test-harness issue."
+  "browser_regression_result": "All six browser suites passed, including long chapters, page-spanning syllable anchors and publisher break-all styles.",
+  "test_harness_note": "An initial intermittent ERR_CONNECTION_REFUSED for app.js was traced to the local HTTP server connection backlog on Windows. Increased backlog to 128; no app runtime change was needed for this test-harness issue.",
+  "cooperative_engine_test_passed": true,
+  "chapter_rendering": {
+    "unit": "active EPUB spine chapter only",
+    "target_source_characters": 2800,
+    "normal_section_ceiling": 4200,
+    "cache": "in-memory, 3 chapters and 5 prepared sections per chapter",
+    "prefetch": "next section of current chapter only",
+    "native_file_read": "background thread",
+    "cancellation": true,
+    "missing_file_retry": true,
+    "source_character_bookmarks": true,
+    "legacy_token_bookmarks": "migrated on opening"
+  },
+  "publisher_note_images": "preserved without replacement",
+  "syllable_layout": "whole-word HSK and lookup, unbreakable individual pinyin syllables",
+  "real_epub_desktop_checks": [
+    {
+      "book": "mockingbird",
+      "hanCharacters": 9094,
+      "firstPageMs": 1146,
+      "cpuThrottle": 4,
+      "sections": 4,
+      "activeWords": 1734,
+      "activeSourceLength": 2952,
+      "originalNoteImagesInSection": 7,
+      "pinyinAnnotationsChecked": 5290,
+      "pinyinFragmentation": false
+    },
+    {
+      "book": "to-live",
+      "hanCharacters": 74932,
+      "firstPageMs": 2095,
+      "cpuThrottle": 4,
+      "sections": 33,
+      "activeWords": 1728,
+      "activeSourceLength": 2877,
+      "originalNoteImagesInSection": 0,
+      "pinyinAnnotationsChecked": 4838,
+      "pinyinFragmentation": false
+    }
+  ],
+  "additional_regressions": [
+    "bounded DOM for 2100-paragraph chapter",
+    "no preprocessing other chapters",
+    "cache reuse",
+    "section transitions both directions",
+    "character and cross-page syllable anchors",
+    "publisher text indentation reset only in reading units",
+    "unbroken pinyin at 320/412 pixels and 32px font",
+    "original note images and inline emphasis preserved",
+    "native read failure/retry",
+    "cancelled delayed callback ignored",
+    "cooperative long-run cancellation"
+  ]
 }

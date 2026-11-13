@@ -6,20 +6,23 @@ An offline Android EPUB reader for Chinese, with adaptive HSK pinyin, an include
 
 **Read freely. Learn at your own pace.**
 
-**Current version: 0.1.5-alpha · Android 8.0+ · English interface · GPLv3**
+**Current version: 0.1.6-alpha · Android 8.0+ · English interface · GPLv3**
 
 OpenChinese is in active alpha development. HSK coverage and word segmentation still need real-world feedback. It uses deterministic word-frequency segmentation with explicit reading-construction rules. Ambiguous compounds, names and polyphonic readings can still need correction.
 
-## New in v0.1.5-alpha
+## New in v0.1.6-alpha
 
-- **Whole-word HSK filtering:** lower-level words hide pinyin; selected-level, higher-level and genuine non-HSK words retain it. Raising the threshold never changes segmentation or adds annotations.
-- Improved segmentation using fixed word frequencies, with tested reading-construction boundaries such as 看 / 中文 / 书 and improved 不 / 知道 segmentation.
-- All dictionary pronunciation/sense pairs are preserved. 姆 now defaults to mǔ, ordinary readings replace unrelated surname defaults, and alternative readings can be chosen for flashcards.
-- 第一 and Chinese number forms receive clearly labelled estimated classifications instead of remaining unclassified.
-- Words spanning EPUB inline emphasis stay selectable as whole words; explicit line breaks remain boundaries.
-- Nineteen engine regression groups, including the screenshot examples, and five browser suites pass. The APK has not yet been verified on a physical Android device.
+- **Faster chapter opening:** prepare only the active chapter. Very large EPUB spine items are shown in bounded sections, with automatic forward/back navigation between them.
+- Prefetch only the next section of the current chapter; reuse recent prepared sections during the app session. No whole-book pinyin preprocessing.
+- Read the chapter file asynchronously. Back and chapter switching cancel obsolete work; late callbacks cannot show the previous book under the new title.
+- Missing or unreadable chapters show a retry option instead of permanent Loading.
+- **Complete pinyin syllables:** publisher break-all styles no longer split letters across lines. Words can wrap between syllables while HSK filtering, dictionary lookup and flashcards still apply to the complete word.
+- Character-based reading anchors preserve position across sections, font changes and words spanning pages. Existing token bookmarks are migrated.
+- Original publisher note markers and note content are retained.
 
-See the [release notes](docs/releases/v0.1.5-alpha.md) and [Android test checklist](docs/TEST-ON-ANDROID.txt).
+The release passed six browser suites, the 19 existing engine groups and a cooperative-engine test. Two real EPUB chapters (about 9,000 and 75,000 Chinese characters) were checked on desktop, including a simulated 4x CPU slowdown. **Physical Android confirmation is still required.**
+
+See the [release notes](docs/releases/v0.1.6-alpha.md) and [Android test checklist](docs/TEST-ON-ANDROID.txt).
 
 ## What you can do
 
@@ -77,7 +80,7 @@ branding/               Original 自由 SVG and PNG logo
 docs/                   Testing, development and release notes
 ```
 
-See [manual testing and known limitations](docs/TESTING.md). The previous alpha was used on a physical Android phone; version 0.1.5 changes have desktop/browser checks and a verified APK signature, but still require device confirmation.
+Long chapters show a section indicator in the reader; page turns cross section boundaries automatically. The in-memory preparation cache is rebuilt after restarting the app. See [manual testing and known limitations](docs/TESTING.md). The previous alpha was used on a physical Android phone; version 0.1.6 changes have desktop/browser checks and a verified APK signature, but still require device confirmation.
 
 ## Contributing
 

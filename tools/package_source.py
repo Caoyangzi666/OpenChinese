@@ -2,14 +2,14 @@
 from pathlib import Path
 import argparse, hashlib, json, zipfile
 root=Path(__file__).resolve().parents[1]
-parser=argparse.ArgumentParser();parser.add_argument('--apk',type=Path,default=root/'dist/OpenChinese-v0.1.5-alpha.apk');parser.add_argument('--output',type=Path,default=root/'dist');args=parser.parse_args()
+parser=argparse.ArgumentParser();parser.add_argument('--apk',type=Path,default=root/'dist/OpenChinese-v0.1.6-alpha.apk');parser.add_argument('--output',type=Path,default=root/'dist');args=parser.parse_args()
 args.output.mkdir(parents=True,exist_ok=True)
 with zipfile.ZipFile(args.apk) as apk:
     assert apk.testzip() is None
     assert apk.read('classes.dex').startswith(b'dex\n')
     for file in (root/'app/src/main/assets').rglob('*'):
         if file.is_file():assert apk.read('assets/'+file.relative_to(root/'app/src/main/assets').as_posix())==file.read_bytes()
-target=args.output/'OpenChinese-v0.1.5-alpha-source.zip'
+target=args.output/'OpenChinese-v0.1.6-alpha-source.zip'
 excluded={'build','dist','.git','.gradle','__pycache__','node_modules'}
 with zipfile.ZipFile(target,'w',zipfile.ZIP_DEFLATED,compresslevel=8) as z:
     for file in root.rglob('*'):

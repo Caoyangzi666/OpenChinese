@@ -5,7 +5,7 @@ from http.server import ThreadingHTTPServer,SimpleHTTPRequestHandler
 from threading import Thread
 import subprocess,os,argparse
 
-parser=argparse.ArgumentParser();parser.add_argument('--node',default='node');parser.add_argument('--tests',nargs='+',default=['ui','native-ui','gestures','preferences','reading']);args=parser.parse_args()
+parser=argparse.ArgumentParser();parser.add_argument('--node',default='node');parser.add_argument('--tests',nargs='+',default=['ui','native-ui','gestures','preferences','reading','chapters']);args=parser.parse_args()
 root=Path(__file__).resolve().parents[1]
 class QuietHandler(SimpleHTTPRequestHandler):
     def log_message(self,*args):pass

@@ -11,3 +11,5 @@
 :root[data-theme="dark"] .delete-book{color:#efb39c}
 :root[data-theme="dark"] #toast{background:#d9e8de;color:#142a20}
 :root[data-theme="dark"] #backdrop{background:#0009}
+
+.reader-status{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:28px;text-align:center;color:var(--muted);background:var(--paper)}

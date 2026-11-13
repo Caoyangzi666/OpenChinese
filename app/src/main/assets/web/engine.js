@@ -23,18 +23,23 @@ class ChineseEngine{
  level(word,entry){return this.classify(word,entry).level;}
  // Word probabilities are fixed data. The selected HSK level is deliberately
  // absent here: it can ONLY affect show(), never segmentation or pronunciation.
- segmentRun(run){if(this.cache.has(run))return this.cache.get(run);const chars=[...run],size=chars.length,out=[],route=Array(size+1),boundaries=new Set();
+ *buildRun(run){if(this.cache.has(run))return this.cache.get(run);const chars=[...run],size=chars.length,out=[],route=Array(size+1),boundaries=new Set();
   // Reading construction: verb + language + reading material. Prevent a
   // lexical match such as 看中 from swallowing the beginning of 中文书.
   const reading=/看(中文|英文|汉语|漢語|英语|英語|法语|法語|日语|日語)(书|書|报纸|報紙|小说|小說|课文|課文)/gu;let match;while((match=reading.exec(run))){const begin=[...run.slice(0,match.index)].length;boundaries.add(begin+1);boundaries.add(begin+1+[...match[1]].length);}
   route[size]={score:0,end:size};
-  for(let i=size-1;i>=0;i--){let best=null;for(let n=1;n<=Math.min(this.max,size-i);n++){const word=chars.slice(i,i+n).join('');if(n>1&&!this.words.has(word))continue;if([...boundaries].some(b=>i<b&&i+n>b))continue;const frequency=this.frequencies[word]||1;const score=Math.log(frequency)-this.logTotal+route[i+n].score;if(!best||score>best.score||(score===best.score&&i+n>best.end))best={score,end:i+n};}route[i]=best;}
+  for(let i=size-1;i>=0;i--){let best=null;for(let n=1;n<=Math.min(this.max,size-i);n++){const word=chars.slice(i,i+n).join('');if(n>1&&!this.words.has(word))continue;if([...boundaries].some(b=>i<b&&i+n>b))continue;const frequency=this.frequencies[word]||1;const score=Math.log(frequency)-this.logTotal+route[i+n].score;if(!best||score>best.score||(score===best.score&&i+n>best.end))best={score,end:i+n};}route[i]=best;if(i%128===0)yield;}
   // An isolated syllabus word is a dictionary lookup, not an ambiguous sentence.
   if(this.levels[run]||this.supplement[run])route[0]={score:0,end:size};
   for(let i=0;i<size;){const end=route[i].end,word=chars.slice(i,end).join(''),entry=this.entry(word);let pinyin=entry?.pinyin||'';
    if(!pinyin&&this.levels[word]&&end-i>1){const parts=[...word].map(c=>this.entry(c)?.pinyin);if(parts.every(Boolean))pinyin=parts.join(' ');}
-   const classification=this.classify(word,entry);out.push({word,pinyin,meaning:entry?.meaning||'',readings:entry?.readings||[],simplified:entry?.simplified||word,traditional:entry?.traditional||word,level:classification.level,classification});i=end;}
-  if(this.cache.size>1500)this.cache.clear();this.cache.set(run,out);return out;}
+   const classification=this.classify(word,entry);out.push({word,pinyin,meaning:entry?.meaning||'',readings:entry?.readings||[],simplified:entry?.simplified||word,traditional:entry?.traditional||word,level:classification.level,classification});i=end;if(out.length%128===0)yield;}
+  if(this.cache.size>1500)this.cache.clear();if(run.length<=5000)this.cache.set(run,out);return out;}
+
+
+ segmentRun(run){const work=this.buildRun(run);let step;do{step=work.next();}while(!step.done);return step.value;}
+ async segmentRunAsync(run,signal){const work=this.buildRun(run);let step,start=performance.now();do{if(signal?.aborted)throw new DOMException('Cancelled','AbortError');step=work.next();if(!step.done&&performance.now()-start>=6){await new Promise(resolve=>setTimeout(resolve,0));start=performance.now();}}while(!step.done);return step.value;}
+ async segmentAsync(text,signal){const chunks=[];let run='',isHan=null,start=performance.now();const flush=async()=>{if(!run)return;if(isHan)chunks.push(...await this.segmentRunAsync(run,signal));else chunks.push({text:run});run='';if(performance.now()-start>=6){await new Promise(resolve=>setTimeout(resolve,0));start=performance.now();}if(signal?.aborted)throw new DOMException('Cancelled','AbortError');};for(const c of text){const h=han(c);if(isHan!==null&&h!==isHan)await flush();run+=c;isHan=h;}await flush();return chunks;}
 
  segment(text){const chunks=[];let run='',isHan=null;function flush(engine){if(!run)return;if(isHan)chunks.push(...engine.segmentRun(run));else chunks.push({text:run});run='';}for(const c of text){const h=han(c);if(isHan!==null&&h!==isHan)flush(this);run+=c;isHan=h;}flush(this);return chunks;}
  show(token,selected,enabled=true){return enabled&&!!token.pinyin&&(!token.level||token.level>=selected);}

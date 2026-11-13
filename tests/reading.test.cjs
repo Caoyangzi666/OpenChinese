@@ -14,8 +14,8 @@ const {chromium}=require('playwright');
   await page.locator('#readerOptions').click();await page.locator('#levelSelect').selectOption(String(level));await page.locator('.sheet-close').click();
   const tokens=await page.evaluate(()=>OpenChineseTest.getTokens());assert.deepEqual(tokens.map(t=>t.word),words);
   if(previous)for(let i=0;i<tokens.length;i++)if(tokens[i].show==='true')assert.equal(previous[i].show,'true');previous=tokens;
-  assert.equal(await frame.locator('[data-word="第一"] ruby').getAttribute('data-show'),level===1?'true':'false');
-  assert.equal(await frame.locator('[data-word="学术"] ruby').getAttribute('data-show'),level<=5?'true':'false');
+  assert((await frame.locator('[data-word="第一"] ruby').evaluateAll(nodes=>nodes.map(n=>n.dataset.show))).every(show=>show===(level===1?'true':'false')));
+  assert((await frame.locator('[data-word="学术"] ruby').evaluateAll(nodes=>nodes.map(n=>n.dataset.show))).every(show=>show===(level<=5?'true':'false')));
  }
  // A word whose pinyin is hidden remains selectable and saves a complete card.
  await frame.locator('[data-word="知道"]').click({delay:550});await page.locator('#cardNote').fill('A complete word, across EPUB formatting');await page.locator('#saveCard').click();

@@ -91,3 +91,9 @@ python tools/prepare_reading_data.py --stardict PATH_TO_CEDICT_BASENAME --freque
 ```
 
 Exact input hashes and sources are recorded in `app/src/main/assets/data/reading-data-version.json`. Keep the MIT notices in `licenses/` and the existing CC BY-SA / CC BY data notices. Engine tests cover 19 groups; the browser runner includes the additional `reading` suite for EPUB inline formatting, pronunciation selection and whole-word flashcards.
+
+## Bounded chapter rendering
+
+`app/src/main/assets/web/chapters.js` plans bounded sections, prepares word tokens cooperatively and keeps a bounded in-memory cache. HSK thresholds do not participate in section planning or segmentation. `reader.js` saves source-character anchors, including the visible syllable when a word spans pages. `MainActivity.readChapterAsync` reads the active file on a background thread; the request ID prevents stale callbacks from replacing a newer selection.
+
+`npm test` also runs `tests/engine-async.test.cjs`. The six-suite browser runner includes `chapters`: long-section loading, current-chapter-only preparation, warm-cache reuse, section navigation, cross-page anchors, recoverable native errors, cancellation, publisher note preservation and unbroken pinyin syllables under break-all styles. Real user EPUBs used for local performance checks are not distributed.

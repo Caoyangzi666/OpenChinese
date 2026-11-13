@@ -32,9 +32,11 @@ class ReaderPager{
   this.scroll=()=>{this.page=Math.max(0,Math.min(this.count-1,Math.round(this.win.scrollX/this.width())));this.onChange(this.location());};this.win.addEventListener('scroll',this.scroll,{passive:true});
  }
  width(){return Math.max(1,this.frame.clientWidth);}
- location(){const w=this.width();let tokenIndex=null;for(let i=0;i<this.tokens.length;i++){const r=this.tokens[i].node.getBoundingClientRect();if(r.right>1&&r.left<w-1&&r.bottom>0&&r.top<this.frame.clientHeight){tokenIndex=i;break;}}return {page:this.page,pageCount:this.count,tokenIndex,scroll:this.count>1?this.page/(this.count-1):0};}
+ location(){const w=this.width();let tokenIndex=null,characterOffset=null;for(let i=0;i<this.tokens.length;i++){const item=this.tokens[i],r=item.node.getBoundingClientRect();if(r.right>1&&r.left<w-1&&r.bottom>0&&r.top<this.frame.clientHeight){const units=[...item.node.querySelectorAll('.oc-syllable')];const visible=units.find(n=>{const box=n.getBoundingClientRect();return box.right>1&&box.left<w-1&&box.bottom>0&&box.top<this.frame.clientHeight;});if(units.length&&!visible)continue;tokenIndex=i;characterOffset=visible?Number(visible.dataset.ocOffset):item.token?.sourceOffset;break;}}return {page:this.page,pageCount:this.count,tokenIndex,characterOffset,scroll:this.count>1?this.page/(this.count-1):0};}
+
  refresh(location={}){this.count=Math.max(1,Math.ceil(this.doc.documentElement.scrollWidth/this.width()-.015));let page=this.page;
-  if(Number.isInteger(location.tokenIndex)&&this.tokens[location.tokenIndex]){const r=this.tokens[location.tokenIndex].node.getBoundingClientRect();page=Math.floor((r.left+this.win.scrollX+1)/this.width());}
+  if(Number.isFinite(location.characterOffset)&&this.tokens.length){let low=0,high=this.tokens.length-1;while(low<high){const mid=Math.ceil((low+high)/2);if(this.tokens[mid].token.sourceOffset<=location.characterOffset)low=mid;else high=mid-1;}const word=this.tokens[low].node,units=[...word.querySelectorAll('.oc-syllable')];let anchor=word;for(const unit of units)if(Number(unit.dataset.ocOffset)<=location.characterOffset)anchor=unit;const r=anchor.getBoundingClientRect();page=Math.floor((r.left+this.win.scrollX+1)/this.width());}
+  else if(Number.isInteger(location.tokenIndex)&&this.tokens[location.tokenIndex]){const r=this.tokens[location.tokenIndex].node.getBoundingClientRect();page=Math.floor((r.left+this.win.scrollX+1)/this.width());}
   else if(location.end)page=this.count-1;
   else if(Number.isFinite(location.scroll))page=Math.round(location.scroll*(this.count-1));
   else if(Number.isInteger(location.page))page=location.page;

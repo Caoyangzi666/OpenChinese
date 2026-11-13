@@ -2,7 +2,7 @@
 
 An offline Android EPUB reader for Chinese, with adaptive pinyin and personal flashcards.
 
-**Version: 0.1.5-alpha.** This update keeps HSK filtering at the whole-word level and improves segmentation and dictionary readings. It preserves the offline library, flashcards, page gestures, configurable hold duration and dark mode. Desktop regressions and APK checks are performed; this version still needs validation on an Android phone.
+**Version: 0.1.6-alpha.** This update fixes slow or apparently stuck chapter opening and pinyin syllables split across lines. It prepares only the active chapter, keeps very large spine items in bounded reading sections and prefetches only the next section of that chapter. Recent prepared sections are cached during the app session. Original publisher footnote images and note content are retained. Device performance still needs confirmation on an Android phone.
 
 
 ## Features
@@ -25,7 +25,7 @@ An offline Android EPUB reader for Chinese, with adaptive pinyin and personal fl
 
 Requires Android 8.0 or later and an up-to-date Android System WebView. The APK is architecture-independent and contains no native application libraries.
 
-1. If updating, export a flashcard backup first, then **install over the existing app without uninstalling**. The APK uses the same application ID and signing key, so Android should offer an update and retain the private library/cards. Transfer `OpenChinese-v0.1.5-alpha.apk` to the Android device and open it. Complete Android's installation flow yourself, including any install-source permission Android requests. No KOReader plugin is required.
+1. If updating, export a flashcard backup first, then **install over the existing app without uninstalling**. The APK uses the same application ID and signing key, so Android should offer an update and retain the private library/cards. Transfer `OpenChinese-v0.1.6-alpha.apk` to the Android device and open it. Complete Android's installation flow yourself, including any install-source permission Android requests. No KOReader plugin is required.
 2. Launch OpenChinese. Wait for the included offline dictionary to load. Open **Try the reading sample**.
 3. Open the HSK control in the reader and select HSK3, then HSK4. `冬天` must lose its pinyin at HSK4; `共同` must keep it. At HSK5, `共同` must lose its pinyin. Words must not split or merge.
 4. Hold `冬天` for the selected duration (0.4 seconds by default), add a note, and choose **Save flashcard**. Leave the reader and open **Flashcards**. The card must be present.
@@ -63,11 +63,11 @@ The included dictionary assets are ready to use. Regeneration is optional; see t
 - Android-bridge integration simulated in Chromium under the app's content policy: import callback, two chapters, flashcard export, library and position persistence.
 - The unchanged Java EPUB importer was previously tested on EPUB samples, a 57-chapter novel, ZIP path traversal and encrypted EPUB rejection. No importer changes are included in this update.
 - Java compilation, DEX generation, APK ZIP integrity, alignment, manifest and v2/v3 signing verification.
-- **Not performed for v0.1.5:** device/emulator launch and touch verification on an Android runtime. Desktop checks do not replace this confirmation.
+- **Not performed for v0.1.6:** device/emulator launch and touch verification on an Android runtime. Desktop checks do not replace this confirmation.
 
 See `DATA-NOTICES.txt` for dictionary and vocabulary sources, licenses and transformations.
 
-## Word filtering and pronunciation in 0.1.5
+## Word filtering and pronunciation in 0.1.6
 
 HSK is assigned to a whole token using the supplied word lists and Simplified/Traditional aliases. A word at a lower level than the selected threshold hides its pinyin; words at the selected level or above retain it. Unlisted words retain available pinyin. A word such as 学术 retains its own HSK level even when its individual characters are elementary. Selected HSK settings never participate in segmentation or reading selection.
 
@@ -88,3 +88,15 @@ python tools/prepare_reading_data.py --stardict /path/to/chinese-reading-assista
 ```
 
 This preserves the shipped HSK vocabulary. Do not regenerate levels from character lists. Run `node tests/engine.test.cjs` and `python tools/test_browser.py --node node` after rebuilding. Browser checks require Playwright and Chrome.
+
+## Chapter loading in 0.1.6
+
+A chapter can be an entire novel inside one EPUB spine item. The reader preserves the original chapter list but renders bounded internal sections, normally around 2,800 source-text characters, with a 4,200-character target ceiling at normal paragraph or sentence boundaries. Exceptionally long unpunctuated passages are split at word boundaries using the cooperative engine. The reader shows the section in its chapter label; page turns cross sections automatically in both directions.
+
+Only the active chapter is read. The next section of that chapter may be prepared after the current one is visible; other chapters and other books are not preprocessed. A bounded in-memory cache retains up to three recent chapters and five prepared sections per chapter. It is recreated after app restart. Missing files display a retry action and chapter navigation rather than permanent Loading. Back and switching chapters cancel obsolete work; late native callbacks cannot overwrite the new book.
+
+Reading positions use source-character anchors and section progress. Existing whole-chapter token bookmarks are migrated when opened. The native bridge reads the chapter file on a background thread. DOM generation yields to the interface and builds ordinary text-node fragments once, rather than repeatedly editing the live chapter for each word.
+
+HSK still applies to the complete word. Ruby syllables are separate unbreakable layout units inside the same selectable word, so a syllable such as líng cannot become lí on one line and ng on the next. Words may wrap between complete syllables while retaining whole-word dictionary lookup and flashcards. Publisher text indentation is reset inside these annotation units so it is not repeated on every word. Inline emphasis and the original red publisher note markers are preserved.
+
+Checks include the six browser suites (interface, native-bridge simulation, gestures, preferences, reading and chapters), the existing 19 engine regression groups and an additional cooperative-engine test. Long-chapter checks cover bounded first render, no whole-book preprocessing, cache reuse, section transitions, bookmarks, error/retry, cancellation and complete pinyin syllables at 320/412-pixel widths with 32-pixel text. The original 74,932-character To Live section and a 9,094-character Mockingbird chapter were also tested locally; original EPUB files are not included in the source distribution. Desktop timings are not Android-device guarantees.

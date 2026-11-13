@@ -21,7 +21,7 @@ for density,size in [('mdpi',48),('hdpi',72),('xhdpi',96),('xxhdpi',144),('xxxhd
 run([bt/'aapt2.exe','compile','--dir',res,'-o',build/'resources.zip'])
 manifest=build/'AndroidManifest.xml'
 manifest.write_text((root/'app/src/main/AndroidManifest.xml').read_text().replace('<manifest ', '<manifest package="org.openchinese.reader" ',1),encoding='utf8')
-run([bt/'aapt2.exe','link','--auto-add-overlay','-o',build/'resources.apk','-I',android,'--manifest',manifest,'--java',generated,'--min-sdk-version','26','--target-sdk-version','35','--version-code','6','--version-name','0.1.5-alpha','-R',build/'resources.zip','-A',root/'app/src/main/assets'])
+run([bt/'aapt2.exe','link','--auto-add-overlay','-o',build/'resources.apk','-I',android,'--manifest',manifest,'--java',generated,'--min-sdk-version','26','--target-sdk-version','35','--version-code','7','--version-name','0.1.6-alpha','-R',build/'resources.zip','-A',root/'app/src/main/assets'])
 sources=list((root/'app/src/main/java').rglob('*.java'))+list(generated.rglob('*.java'))
 compile_api=build/'android-api35.jar'
 shutil.copy2(android,compile_api)
@@ -41,7 +41,7 @@ if missing:raise SystemExit('Set signing environment variables: '+', '.join(miss
 key=Path(os.environ['OPENCHINESE_KEYSTORE']).expanduser().resolve()
 if not key.is_file():raise SystemExit('Signing keystore does not exist: '+str(key))
 if not os.environ.get('OPENCHINESE_KEY_PASS'):os.environ['OPENCHINESE_KEY_PASS']=os.environ['OPENCHINESE_STORE_PASS']
-out=root/'dist';out.mkdir(exist_ok=True);target=out/'OpenChinese-v0.1.5-alpha.apk'
+out=root/'dist';out.mkdir(exist_ok=True);target=out/'OpenChinese-v0.1.6-alpha.apk'
 run([jdk/'java.exe','-jar',bt/'lib/apksigner.jar','sign','--ks',key,'--ks-key-alias',os.environ['OPENCHINESE_KEY_ALIAS'],'--ks-pass','env:OPENCHINESE_STORE_PASS','--key-pass','env:OPENCHINESE_KEY_PASS','--out',target,build/'aligned.apk'])
 run([jdk/'java.exe','-jar',bt/'lib/apksigner.jar','verify','--verbose',target]);run([bt/'zipalign.exe','-c','4',target]);run([bt/'aapt2.exe','dump','badging',target])
 target.with_suffix('.apk.sha256').write_text(hashlib.sha256(target.read_bytes()).hexdigest()+'  '+target.name+'\n')

@@ -1,11 +1,14 @@
-OpenChinese 0.1.5-alpha — word-based HSK reading
+OpenChinese 0.1.6-alpha — chapter opening and pinyin layout
 
-1. Export your existing flashcards as a precaution. Install this APK over the current app; do not uninstall or clear app storage.
-2. Open your book and the first chapter. At HSK1, 第一 should show dì yī. At HSK2 and above it should hide that pinyin. The estimate is labelled in the dictionary.
-3. 姆 should show mǔ. Hold it to open the dictionary: alternative m remains available for expressions that use that reading.
-4. Change HSK3 to HSK4, then HSK6 and HSK7–9. Pinyin may disappear, but no extra annotations should appear and words must not split or merge.
-5. Hold a word whose pinyin is hidden. Save its flashcard and a note. Verify the complete word, reading, meaning and note in Flashcards after closing and reopening the app.
-6. For a polyphonic word, choose an alternative pronunciation in the dictionary sheet and save it. Verify that its matching definition and chosen pronunciation were saved.
-7. Check swipe/side-tap page turns, reading-position restore, dark mode and your existing flashcards.
+Install over the existing official app without uninstalling or clearing storage. Export a flashcard backup first.
 
-This version passed desktop browser and APK checks. It has not been opened on a physical Android device by the developer assistant. Ambiguous segmentation and readings can still need correction.
+1. Open the long main section of To Live. Text should appear without waiting for pinyin for the full novel. Back must work while preparing.
+2. Open Mockingbird and the first chapter. Page turns automatically move between the bounded sections shown in the chapter label. Test both directions at a section boundary.
+3. Leave and reopen a book, including after restarting the app. Check reading position, chapter and selected HSK level.
+4. Compare HSK3 and HSK4: words/readings remain the same and higher thresholds only hide annotations. Hold a hidden-pinyin word and save its complete-word flashcard.
+5. At 26px and 32px, check 年龄 (nián líng) and 沾边 (zhān biān). A complete syllable must remain on one line; letters must not spill onto the next line. Words can wrap between syllables while staying one selectable word.
+6. Check the red publisher 注 markers and original note content are still present.
+7. Check dark/light mode, swipe and side-tap navigation, chapter picker, existing flashcards, notes, review history and backup/export.
+8. If a chapter cannot be read, the app should show a retry option rather than permanent Loading. Use Back or choose a different chapter.
+
+This build passed desktop browser and APK validation. Desktop timings, including a simulated 4x CPU slowdown, are not guarantees for a physical Android device. The release still needs device confirmation.
